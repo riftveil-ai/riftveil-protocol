@@ -1,0 +1,538 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://riftveil.ai/schemas/riftveil_report.schema.json",
+  "$comment": "Riftveil Protocol v1.0.0. Copyright 2026 Olivier Laurent. Licensed under the Apache License, Version 2.0.",
+  "title": "Riftveil Report",
+  "description": "Structured form of a Riftveil Protocol report (v1.0.0). Riftveil challenges an AI-generated output so a human can decide; it never validates, never rewrites, never concludes. A report is a set of findings, assumptions and open questions, not a verdict. Optional parts: an owner per question, the \"before_this_runs\" block for agent plans (with its reach), the closing line, the \"independence\" flag, \"highest_value_question\" (the Record box), the \"attestation\" object (the follow-up block, completed by the human, output on request only), the \"metrics\" object a team can aggregate, and \"context.triage_criteria\" (the Criteria line of section 1). A financial commitment given only as an amount, without the size of the organisation (\"not stated (amount without scale)\" in the Criteria line), is recorded as \"not_stated\". An input stopped by the input gate produces no report, and therefore no JSON form.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "context",
+    "what_holds_up",
+    "findings",
+    "assumptions",
+    "questions",
+    "self_awareness_note"
+  ],
+  "properties": {
+    "protocol_version": {
+      "type": "string",
+      "description": "Version of the Riftveil Protocol used to produce the report, e.g. \"1.0.0\".",
+      "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"
+    },
+    "language": {
+      "type": "string",
+      "description": "Optional BCP 47 tag of the language the report is written in (\"en\", \"fr\"). Riftveil answers in the user's language.",
+      "pattern": "^[a-zA-Z]{2,3}(-[a-zA-Z0-9]{2,8})*$"
+    },
+    "context": {
+      "$ref": "#/$defs/context"
+    },
+    "independence": {
+      "type": "string",
+      "enum": [
+        "different_model_family",
+        "different_session",
+        "same_session",
+        "not_stated"
+      ],
+      "description": "Optional. The independence line of the Record box: whether the second reader ran on a different model family from the author, in a different session with no access to the authoring conversation, or in the same session as the author (findings are then a first pass, not a second reader). \"not_stated\": the user did not say which model or session produced the project; the line reads \"not stated by the user, to be confirmed by the signer\"."
+    },
+    "most_useful_question": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500,
+      "description": "Optional. The Record box line \"Most useful question:\": the one question from section 5 whose answer would most change the decision, quoted."
+    },
+    "what_holds_up": {
+      "type": "string",
+      "description": "Section 2. Two to four sentences on elements that are internally consistent. Diagnostic scope, never praise (Rule 1 applies): it tells the reader where NOT to spend verification effort.",
+      "minLength": 1,
+      "maxLength": 600
+    },
+    "findings": {
+      "type": "array",
+      "description": "Section 3. What deserves scrutiny, ordered by descending impact regardless of level. When Level 2 is applied, the report opens this section with the Level 2 note (see level_2_note).",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    },
+    "level_2_note": {
+      "type": "string",
+      "description": "Optional. Present when Level 2 was applied: the one-line caveat that opens section 3 (an AI model does not reason in the human sense; the reasoning checks test logical consistency, not the process that produced the project).",
+      "minLength": 20,
+      "maxLength": 400
+    },
+    "assumptions": {
+      "type": "array",
+      "description": "Section 4. Assumptions the output relies on.",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/assumption"
+      }
+    },
+    "before_this_runs": {
+      "$ref": "#/$defs/before_this_runs"
+    },
+    "questions": {
+      "type": "array",
+      "description": "Section 5. Open questions before the human decides. Each must be specific to this output, answerable by the user from their context, and decision-relevant. 5-8 at MODERATE and above, 3 at LOW, 1-2 for inputs under 100 words. This is the last section: the report ends on a question (or on the permitted closing line).",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "$ref": "#/$defs/question"
+      }
+    },
+    "closing_line": {
+      "type": "string",
+      "description": "Optional. The only sentence permitted after the questions, in the report's language.",
+      "enum": [
+        "No verdict. The decision is yours.",
+        "Aucun verdict. La décision vous appartient."
+      ]
+    },
+    "attestation": {
+      "$ref": "#/$defs/attestation"
+    },
+    "self_awareness_note": {
+      "type": "string",
+      "description": "Rule 4. A statement that this challenge was produced by an AI sharing structural limitations with the system that produced the output, and that the human's contextual knowledge is the final arbiter.",
+      "minLength": 20,
+      "maxLength": 800
+    },
+    "focused_sections": {
+      "type": "array",
+      "description": "Optional. For very long inputs (>2000 words), the sections the challenge focused on and why.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "metrics": {
+      "$ref": "#/$defs/metrics"
+    }
+  },
+  "$defs": {
+    "level": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "description": "0 = question, 1 = answer, 2 = reasoning, 3 = perspective, 4 = applicability."
+    },
+    "context": {
+      "type": "object",
+      "description": "Section 1. Inferred context and triage.",
+      "additionalProperties": false,
+      "required": [
+        "inferred_domain",
+        "inferred_role",
+        "decision_type",
+        "stakes_level",
+        "triage_rationale",
+        "levels_applied"
+      ],
+      "properties": {
+        "inferred_domain": {
+          "type": "string",
+          "description": "Domain the output belongs to, e.g. \"commercial strategy\", \"pharma regulatory\", \"software architecture\".",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "inferred_role": {
+          "type": "string",
+          "description": "Role or audience the output seems written for, e.g. \"leadership team\", \"market access manager\".",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "decision_type": {
+          "type": "string",
+          "description": "Decision the output is informing, e.g. \"market entry\", \"vendor selection\", \"regulatory submission\".",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "stakes_level": {
+          "type": "string",
+          "enum": [
+            "LOW",
+            "MODERATE",
+            "HIGH",
+            "CRITICAL"
+          ],
+          "description": "Triage outcome. LOW = L1 only; MODERATE = L0-2; HIGH = L0-3; CRITICAL = L0-4."
+        },
+        "triage_rationale": {
+          "type": "string",
+          "description": "Why this stakes level: reversibility, impact scope, financial commitment. State it if stakes could not be inferred and MODERATE was applied by default.",
+          "minLength": 1,
+          "maxLength": 800
+        },
+        "levels_applied": {
+          "type": "array",
+          "description": "Levels actually applied, e.g. [0, 1, 2, 3].",
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/level"
+          }
+        },
+        "context_supplied_by_user": {
+          "type": "boolean",
+          "description": "Optional. True when the user stated role, stakes or decision explicitly and Riftveil used that instead of inferring."
+        },
+        "triage_criteria": {
+          "type": "object",
+          "description": "Optional. The Criteria line of section 1, which makes the escalation rule checkable: \"Criteria: reversibility [LEVEL] · impact scope [LEVEL] · financial commitment [LEVEL] → [rule applied] → [TRIAGE]\". The triage is the highest criterion, or CRITICAL when two or more are at HIGH or above; stakes_level carries the result.",
+          "additionalProperties": false,
+          "required": [
+            "reversibility",
+            "impact_scope",
+            "financial_commitment"
+          ],
+          "properties": {
+            "reversibility": {
+              "$ref": "#/$defs/criterion_level"
+            },
+            "impact_scope": {
+              "$ref": "#/$defs/criterion_level"
+            },
+            "financial_commitment": {
+              "$ref": "#/$defs/criterion_level"
+            },
+            "stated_by_user": {
+              "type": "array",
+              "description": "Optional. The criteria read from the user's own context, marked \"(stated)\" in the report.",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "reversibility",
+                  "impact_scope",
+                  "financial_commitment"
+                ]
+              }
+            },
+            "rule_applied": {
+              "type": "string",
+              "description": "Optional. The rule as written in the report, e.g. \"highest single criterion\" or \"two criteria at HIGH or above\".",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          }
+        }
+      }
+    },
+    "criterion_level": {
+      "type": "string",
+      "enum": [
+        "LOW",
+        "MODERATE",
+        "HIGH",
+        "CRITICAL",
+        "not_stated"
+      ],
+      "description": "Level read for one triage criterion, or \"not_stated\" when neither the project nor the user's context gives it; it also records a financial commitment given only as an amount, without the size of the organisation (\"not stated (amount without scale)\" in the report)."
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "level",
+        "technique_id",
+        "observed",
+        "effect_on_decision",
+        "to_check",
+        "impact"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "One-line, specific label for the finding.",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "level": {
+          "$ref": "#/$defs/level"
+        },
+        "technique_id": {
+          "type": "string",
+          "description": "Technique that produced the finding, e.g. \"2.1\" (assumption surfacing). Format: <level>.<technique>.",
+          "pattern": "^[0-4]\\.[1-5]$"
+        },
+        "observed": {
+          "type": "string",
+          "description": "The \"Observed:\" line: a concrete observation drawn from the project.",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "effect_on_decision": {
+          "type": "string",
+          "description": "The \"Effect on the decision:\" line: the specific consequence for the decision if this is not addressed.",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "to_check": {
+          "type": "string",
+          "description": "The \"To check:\" line: an actionable step for the human, \"verify X with Y\", never \"be careful\".",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "impact": {
+          "type": "string",
+          "enum": [
+            "LOW",
+            "MODERATE",
+            "HIGH",
+            "CRITICAL"
+          ],
+          "description": "Estimated impact on the decision if the finding is left unaddressed. Findings are ordered by this, descending."
+        }
+      }
+    },
+    "assumption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assumption",
+        "if_false",
+        "who_can_verify"
+      ],
+      "properties": {
+        "assumption": {
+          "type": "string",
+          "description": "The assumption, stated plainly.",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "if_false": {
+          "type": "string",
+          "description": "What changes if the assumption is false: a specific consequence.",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "who_can_verify": {
+          "type": "string",
+          "description": "A person or function in the user's context who can verify it. Never \"do more AI research\".",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "stated_in_output": {
+          "type": "boolean",
+          "description": "Optional. True if the output acknowledged this assumption; false if it was unstated."
+        }
+      }
+    },
+    "question": {
+      "description": "A question before the decision. Either a plain string or an object carrying the optional owner hint.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 500
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "question"
+          ],
+          "properties": {
+            "question": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 500,
+              "description": "The question, as a direct question with no preamble."
+            },
+            "owner": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "description": "Optional. The role in the user's context that can answer it (\"finance controller\", \"head of operations\"). Only when the role is inferable from the context; never invented."
+            }
+          }
+        }
+      ]
+    },
+    "before_this_runs": {
+      "type": "object",
+      "description": "Mandatory in a report on an agent plan or a set of proposed actions (pre-action review); omitted otherwise. Sits between sections 4 and 5. Riftveil never approves execution: the stop condition is a condition for the human to check, not a permission. It carries an optional reach line.",
+      "additionalProperties": false,
+      "required": [
+        "irreversible_steps",
+        "missing_checkpoints",
+        "agent_assumptions",
+        "stop_condition"
+      ],
+      "properties": {
+        "irreversible_steps": {
+          "type": "array",
+          "description": "Each step that cannot be undone once executed, or that acts outside the organisation, with what it touches.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          }
+        },
+        "missing_checkpoints": {
+          "type": "array",
+          "description": "Points in the sequence where a human should look before the next step runs and the plan does not provide for it.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          }
+        },
+        "agent_assumptions": {
+          "type": "array",
+          "description": "What the agent assumed about the permissions it holds, the data it read, and the current state of the systems and people it will act on.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          }
+        },
+        "stop_condition": {
+          "type": "string",
+          "description": "One observable condition under which the human should halt execution. Stated as a condition to check, never as \"safe to run\".",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "reach": {
+          "type": "string",
+          "enum": [
+            "one_user",
+            "one_team",
+            "organisation_wide",
+            "external_or_public"
+          ],
+          "description": "Optional. The widest audience any step of the plan touches once it runs. Organisation-wide or external: triage at least HIGH; irreversible and external: CRITICAL."
+        },
+        "reach_set_by": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600,
+          "description": "Optional. The step that sets the reach."
+        }
+      }
+    },
+    "attestation": {
+      "type": "object",
+      "description": "Optional. The follow-up block: completed by the human, never by the model, output on request only. It certifies nothing; it is where the human notes what they did with the report. The model outputs the empty template only; a filed record carries the signer's own words. All fields optional strings.",
+      "additionalProperties": false,
+      "properties": {
+        "checked_by_human": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "\"I checked myself: [what, which source]\" (written by the signer)."
+        },
+        "assigned": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "\"Open questions assigned to: [role, question numbers]\" (written by the signer)."
+        },
+        "record_id": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Record ID in the team's decision file (written by the signer)."
+        },
+        "signed_at": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Date of the follow-up note, ISO 8601 preferred (written by the human)."
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "description": "Optional. Record metrics as defined in the protocol's <record_metrics> block: every value is derivable from the report itself, for monthly aggregation by a team. None is a score of the output.",
+      "additionalProperties": false,
+      "properties": {
+        "findings_total": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of findings in section 3 (length of findings[])."
+        },
+        "findings_by_impact": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Findings split by impact, from findings[].impact.",
+          "properties": {
+            "critical": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "high": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "moderate": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "low": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "findings_by_challenge_level": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Findings split by challenge level 0-4, from findings[].level.",
+          "properties": {
+            "level_0": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "level_1": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "level_2": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "level_3": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "level_4": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "assumptions_with_verifier": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Assumptions whose who_can_verify names a human role."
+        },
+        "assumptions_without_verifier": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Assumptions whose verifier line is missing, names the AI, or names no role. The protocol requires zero."
+        },
+        "questions_with_owner": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Questions carrying an owner."
+        },
+        "questions_without_owner": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Questions without an owner."
+        },
+        "attestation_present": {
+          "type": "boolean",
+          "description": "True when the filed record carries a follow-up block (`attestation` object) with at least one line filled in by the human; the empty template does not count."
+        },
+        "same_session_as_author": {
+          "type": "boolean",
+          "description": "True only when independence is \"same_session\": the findings are a first pass, not a second reader."
+        }
+      }
+    }
+  }
+}

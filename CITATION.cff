@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use the Riftveil Protocol, please cite it as below."
+title: "Riftveil Protocol"
+type: software
+authors:
+  - family-names: Laurent
+    given-names: Olivier
+version: 1.0.0
+date-released: 2026-10-24
+license: Apache-2.0
+url: "https://riftveil.ai"
+repository-code: "https://github.com/riftveil-ai/riftveil-protocol"
+abstract: "An open protocol that sits between an AI output and the signature of the person who relies on it. It challenges the output before it is signed, never validates it, and leaves a record."
+keywords:
+  - automation bias
+  - AI oversight
+  - human in the loop
+  - decision record
+  - system prompt

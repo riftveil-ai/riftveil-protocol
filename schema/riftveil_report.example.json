@@ -1,0 +1,161 @@
+{
+  "protocol_version": "1.0.0",
+  "language": "en",
+  "context": {
+    "inferred_domain": "commercial strategy / market entry",
+    "inferred_role": "leadership team or executive audience",
+    "decision_type": "market entry decision (Nordic region, launch in eighteen months)",
+    "stakes_level": "HIGH",
+    "triage_rationale": "A market entry is costly to undo once launched; the project states neither the financial commitment on the scale of the organisation nor who the decision affects. Only reversibility can be read, at HIGH, so the highest single criterion gives HIGH. Two criteria at HIGH or above would make this CRITICAL: the user is invited to say where the financial commitment sits for the organisation and who is affected.",
+    "levels_applied": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "context_supplied_by_user": false,
+    "triage_criteria": {
+      "reversibility": "HIGH",
+      "impact_scope": "not_stated",
+      "financial_commitment": "not_stated",
+      "rule_applied": "highest single criterion"
+    }
+  },
+  "independence": "not_stated",
+  "most_useful_question": "What is the calculation behind the EUR 2.4M figure: what are the inputs, and how sensitive is the output to changes in those inputs?",
+  "what_holds_up": "The recommendation names three market-entry criteria (macroeconomic conditions, regulatory environment, competitive landscape) and links brand positioning to local consumer values. These points do not contradict one another within the text; whether each one is true is what the findings below examine. Diagnostic scope, not an endorsement of their content.",
+  "findings": [
+    {
+      "label": "The revenue projection has no visible foundation.",
+      "level": 1,
+      "technique_id": "1.4",
+      "observed": "EUR 2.4M first-year revenue is stated as an estimate but no methodology, assumptions, or model is referenced. It is unclear whether this figure comes from comparable market launches, bottom-up customer modelling, or something else entirely.",
+      "effect_on_decision": "A specific number without a stated basis creates false precision. It may be treated as a target rather than a hypothesis, and resource allocation will be calibrated against it.",
+      "to_check": "Ask the team to produce the calculation behind EUR 2.4M with explicit inputs. Vary the 2-3 most sensitive inputs by plus or minus 30% and see how the figure moves.",
+      "impact": "HIGH"
+    },
+    {
+      "label": "\"Limited competition\" may not mean what it implies.",
+      "level": 2,
+      "technique_id": "2.1",
+      "observed": "\"Limited competition from established players\" could indicate an attractive opportunity, or it could indicate that established players evaluated this market and chose not to enter. The output does not distinguish between these two explanations.",
+      "effect_on_decision": "The two readings lead to opposite conclusions about attractiveness. The recommendation silently relies on the favourable one.",
+      "to_check": "Identify whether any major competitor previously entered and exited the Nordic market, or publicly evaluated and passed on it. Their reasons may be more informative than the current competitive snapshot.",
+      "impact": "HIGH"
+    },
+    {
+      "label": "\"Nordic market\" is treated as a single entity.",
+      "level": 0,
+      "technique_id": "0.3",
+      "observed": "The recommendation groups Denmark, Sweden, Norway, Finland and Iceland as one market, with no figure or condition by country.",
+      "effect_on_decision": "A strategy that works in Sweden may not transfer to Finland. Region-level attractiveness says nothing about country-level feasibility or sequencing.",
+      "to_check": "Which specific country is the entry point? What is the sequencing logic? Has the team evaluated country-level feasibility, or only region-level attractiveness?",
+      "impact": "MODERATE"
+    },
+    {
+      "label": "Sustainability alignment is asserted, not demonstrated.",
+      "level": 3,
+      "technique_id": "3.3",
+      "observed": "The claim that brand positioning \"aligns well with Nordic consumer preferences for sustainability\" is presented as self-evident. It assumes Nordic consumers would find the company's sustainability credentials credible; the project gives no consumer research to show it.",
+      "effect_on_decision": "Seen from the Nordic consumer's side rather than the brand's, the same positioning can become a liability instead of an asset.",
+      "to_check": "Has any Nordic consumer research been conducted? Are sustainability claims third-party certified? What is the risk of a greenwashing perception?",
+      "impact": "MODERATE"
+    },
+    {
+      "label": "Eighteen-month timeline is not stress-tested.",
+      "level": 2,
+      "technique_id": "2.2",
+      "observed": "No implementation milestones, dependencies or critical path are mentioned. A launch in eighteen months appears as a target date, but nothing in the output shows it is feasible given the steps required (regulatory filings, local partnerships, logistics, hiring).",
+      "effect_on_decision": "The date is asserted, not derived. If it is not reachable, every downstream plan built on it inherits the error.",
+      "to_check": "Map backwards from the launch date. What must be true twelve months from now, six months before launch, for a launch in eighteen months to be realistic?",
+      "impact": "MODERATE"
+    }
+  ],
+  "level_2_note": "Note on reasoning: an AI model does not reason in the human sense; the reasoning checks below test logical consistency, not the process that produced the project.",
+  "assumptions": [
+    {
+      "assumption": "The Nordic market is ready for a new entrant in this category.",
+      "if_false": "If the market is saturated or declining, the \"limited competition\" signal is misleading.",
+      "who_can_verify": "The commercial or market-intelligence lead, with current market size and trajectory data.",
+      "stated_in_output": false
+    },
+    {
+      "assumption": "EUR 2.4M first-year revenue is achievable.",
+      "if_false": "If this number is aspirational rather than modelled, resource allocation will be miscalibrated.",
+      "who_can_verify": "The team that produced the figure, who should be able to show their working; the finance controller can check the inputs.",
+      "stated_in_output": true
+    },
+    {
+      "assumption": "Regulatory conditions are \"favorable\" uniformly across Nordic countries.",
+      "if_false": "If one country has restrictions the others do not, the entry strategy needs country-level differentiation.",
+      "who_can_verify": "Local regulatory counsel, country by country.",
+      "stated_in_output": true
+    },
+    {
+      "assumption": "Brand sustainability positioning will be perceived as genuine by Nordic consumers.",
+      "if_false": "It becomes a liability rather than an asset.",
+      "who_can_verify": "The brand or marketing lead, with in-market research or a local advisor.",
+      "stated_in_output": true
+    },
+    {
+      "assumption": "The organisation has the capacity to execute a Nordic launch in parallel with existing commitments.",
+      "if_false": "The launch competes with existing commitments for the same people and budget; both suffer.",
+      "who_can_verify": "The head of operations.",
+      "stated_in_output": false
+    }
+  ],
+  "questions": [
+    {
+      "question": "Which specific Nordic country are you entering first, and what is the logic for that sequence?",
+      "owner": "commercial lead"
+    },
+    {
+      "question": "What is the calculation behind the EUR 2.4M figure: what are the inputs, and how sensitive is the output to changes in those inputs?",
+      "owner": "finance controller"
+    },
+    {
+      "question": "Have any competitors evaluated and rejected this market? If so, what were their reasons?",
+      "owner": "market-intelligence lead"
+    },
+    {
+      "question": "What must be completed twelve months from now for a launch in eighteen months to be feasible? Is that realistic given current resource commitments?",
+      "owner": "head of operations"
+    },
+    {
+      "question": "Have you validated your sustainability positioning with actual Nordic consumers or local market experts?",
+      "owner": "brand lead"
+    },
+    "What does your exit strategy look like if first-year revenue comes in at 50% of projection?",
+    "Who in the organisation is accountable for this launch, and do they have the bandwidth?"
+  ],
+  "closing_line": "No verdict. The decision is yours.",
+  "attestation": {
+    "checked_by_human": "The EUR 2.4M build-up: read the FP&A model (v3, 24 October 2026) with the finance controller; the top-line growth input is a placeholder, not a sourced figure.",
+    "assigned": "Commercial lead: questions 1 and 3. Head of operations: question 4. Brand lead: question 5.",
+    "record_id": "DR-2026-041",
+    "signed_at": "2026-10-24"
+  },
+  "self_awareness_note": "This challenge was produced by an AI applying a structured framework to another AI's output. It shares that system's structural limitations, including a pull towards narrative coherence, and may have missed the real issue. There may be dimensions here that Riftveil does not see. Your contextual knowledge is the final arbiter.",
+  "metrics": {
+    "findings_total": 5,
+    "findings_by_impact": {
+      "critical": 0,
+      "high": 2,
+      "moderate": 3,
+      "low": 0
+    },
+    "findings_by_challenge_level": {
+      "level_0": 1,
+      "level_1": 1,
+      "level_2": 2,
+      "level_3": 1,
+      "level_4": 0
+    },
+    "assumptions_with_verifier": 5,
+    "assumptions_without_verifier": 0,
+    "questions_with_owner": 5,
+    "questions_without_owner": 2,
+    "attestation_present": true,
+    "same_session_as_author": false
+  }
+}
