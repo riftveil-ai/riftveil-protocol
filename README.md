@@ -1,8 +1,8 @@
 # Riftveil Protocol
 
-**AI generates. You decide.**
+**AI will never be held accountable. You will.**
 
-An open protocol that sits between an AI output and your signature. It challenges the output before you sign it, never validates it, and leaves a record.
+When a decision prepared with AI is questioned, nobody holds the AI assistant to account. They hold the person who signed. Riftveil is the human oversight layer between an AI output and your signature: an open protocol that challenges the output before you sign, never validates it, and leaves a record you can defend.
 
 [![Licence: Apache 2.0](https://img.shields.io/badge/licence-Apache%202.0-blue)](LICENSE) [![Release: v1.0.0](https://img.shields.io/badge/release-v1.0.0-informational)](CHANGELOG.md) [![Record format: AttestScope 0.1](https://img.shields.io/badge/record%20format-AttestScope%200.1-lightgrey)](https://attestscope.ai)
 
