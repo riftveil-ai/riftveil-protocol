@@ -4,7 +4,7 @@
 
 When a decision prepared with AI is questioned, nobody holds the AI assistant to account. They hold the person who signed. Riftveil is the human oversight layer between an AI output and your signature: an open protocol that challenges the output before you sign, never validates it, and leaves a record you can defend.
 
-[![Licence: Apache 2.0](https://img.shields.io/badge/licence-Apache%202.0-blue)](LICENSE) [![Release: v1.0.0](https://img.shields.io/badge/release-v1.0.0-informational)](CHANGELOG.md) [![Record format: AttestScope 0.1](https://img.shields.io/badge/record%20format-AttestScope%200.1-lightgrey)](https://attestscope.ai)
+[![Licence: Apache 2.0](https://img.shields.io/badge/licence-Apache%202.0-blue)](LICENSE) [![Release: v1.0.0](https://img.shields.io/badge/release-v1.0.0-informational)](CHANGELOG.md) [![Record format: AttestScope 0.1.1](https://img.shields.io/badge/record%20format-AttestScope%200.1.1-lightgrey)](https://attestscope.ai)
 
 [Quick start](#quick-start) · [What you get](#what-you-get) · [How it works](#how-it-works) · [Proof that a report has not changed](#proof-that-a-report-has-not-changed) · [Contributing](#contributing)
 
@@ -106,7 +106,7 @@ A system prompt cannot prove when a report was produced or that nobody edited it
 The record file follows [AttestScope](https://attestscope.ai), the open format for the human accountability record, where *accountability* means human responsibility (who answers for what), not in the legal sense.
 
 - **Verify online** at [riftveil.ai/verify](https://riftveil.ai/verify): drop the record file; the fingerprint is recomputed in your browser. Only fingerprints are sent, never the text.
-- **Verify without going through us**: not yet available. Ed25519 signatures on the records, and the public keys, are planned for version 0.1.1 of the AttestScope specification.
+- **Verify without going through us**: since version 0.1.1 of the AttestScope specification, every record file carries an Ed25519 signature from riftveil.ai. Anyone can check it with the public key published at [riftveil.ai/keys.json](https://riftveil.ai/keys.json), without asking riftveil.ai for anything. Specification and verification code: [attestscope-spec](https://github.com/riftveil-ai/attestscope-spec). Older record files (version 0.1) are not signed: they are verified online by their seal.
 - **Register** a report produced with this protocol in ChatGPT, Claude or Microsoft 365 Copilot at [riftveil.ai/register](https://riftveil.ai/register): only its fingerprint is sent.
 
 A valid seal proves who assigned the ID, when, and that the text has not changed since. It never says that the report, or the decision, is right.
