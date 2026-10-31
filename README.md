@@ -147,7 +147,7 @@ The [`CITATION.cff`](CITATION.cff) file provides the reference: use the "Cite th
 
 ## Background
 
-Riftveil implements the method set out in *The Rift*, a forthcoming book by Olivier Laurent (2026). The model on which the method is based: [humanfrontier.ai](https://humanfrontier.ai).
+Riftveil implements the method set out in *The Rift*, a book by Olivier Laurent (2026). The model on which the method is based: [humanfrontier.ai](https://humanfrontier.ai).
 
 ---
 
